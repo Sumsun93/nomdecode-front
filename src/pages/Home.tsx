@@ -39,7 +39,7 @@ function Home() {
                     rules={[
                         {
                             required: true,
-                            message: 'Veuillez entrer un pseudo',
+                            message: 'Veuillez prouter un pseudo',
                         },
                     ]}
                 >
