@@ -5,4 +5,5 @@ export const socket = io('http://localhost:3005', {
     transports: ['websocket'],
     upgrade: false,
 });
+
 export const SocketContext = React.createContext(socket);

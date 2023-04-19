@@ -1,4 +1,4 @@
-import {Button, Form, Input, Layout, Typography} from 'antd';
+import {Button, Form, Layout, Typography} from 'antd';
 import {useContext} from 'react';
 import {SocketContext} from '../context/socket';
 import {useNavigate} from 'react-router-dom';
@@ -25,7 +25,8 @@ function Home() {
                 alignItems: 'center',
             }}
         >
-            <Typography.Title>Codenames</Typography.Title>
+            <Typography.Title> Codenames </Typography.Title>
+
             <Form
                 name="create-lobby"
                 onFinish={handleClick}
@@ -33,18 +34,6 @@ function Home() {
                     padding: '20px',
                 }}
             >
-                <Form.Item
-                    label="Pseudo"
-                    name="pseudo"
-                    rules={[
-                        {
-                            required: true,
-                            message: 'Veuillez prouter un pseudo',
-                        },
-                    ]}
-                >
-                    <Input />
-                </Form.Item>
                 <Form.Item
                     style={{
                         width: '100%',
