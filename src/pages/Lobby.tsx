@@ -67,13 +67,15 @@ const Lobby = () => {
 
                     <Divider />
 
-                    <Form
-                        style={{
-                            display: 'flex',
-                            padding: '1rem',
-                        }}
-                    >
-                        <Input placeholder="New Message ..." bordered={false} />
+                    <Form style={{}}>
+                        <Input
+                            type="textarea"
+                            placeholder="New Message ..."
+                            bordered={false}
+                            style={{
+                                backgroundColor: 'rgba(50, 50, 50, 0.2)',
+                            }}
+                        />
                         <Button type="text" block>
                             Send
                         </Button>
