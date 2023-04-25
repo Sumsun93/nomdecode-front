@@ -1,4 +1,4 @@
-import {useContext, useState} from 'react';
+import {useContext, useEffect, useState} from 'react';
 import {useParams} from 'react-router-dom';
 
 import {Button, Divider, Form, Input, Layout, Modal, Typography} from 'antd';
@@ -6,34 +6,74 @@ import {Content, Header} from 'antd/es/layout/layout';
 import Sider from 'antd/es/layout/Sider';
 import Message from '../components/Message/index';
 
+import {setCurrentUsername} from '../slices/chatSlice';
 import {SocketContext} from '../context/socket';
+import {useDispatch, useSelector} from 'react-redux';
+import {RootState} from '../store';
+
+interface MessageObj {
+    user: string;
+    content: string;
+    lobbyId: number;
+}
 
 const Lobby = () => {
-    const [isChoosingName, setIsChoosingName] = useState(true);
+    const dispatch = useDispatch();
     const socket = useContext(SocketContext);
     const params = useParams();
     const [form] = Form.useForm();
+    const [isChoosingName, setIsChoosingName] = useState(true);
+    const currentUsername = useSelector<RootState>(
+        (state) => state.chat.currentUsername,
+    );
+    const [messages, setMessages] = useState<Array<MessageObj>>([]); // REVOIR LE TYPE?
+    const [messageInput, setMessageInput] = useState('');
+    const [usernameInput, setUsernameInput] = useState('');
 
-    console.log(socket);
+    // receiving a message (including own)
+    socket.on('chat', function (message) {
+        setMessages([...messages, message]);
+    });
 
+    const listOfMessages = messages.map((message) => (
+        <Message
+            key={self.crypto.randomUUID()}
+            username={message.user}
+            content={message.content}
+        />
+    ));
+
+    // joining the lobby
     const handleSubmit = () => {
         socket.emit('joinLobby', params.lobbyId);
+        dispatch(setCurrentUsername(usernameInput));
         setIsChoosingName(false);
+        setUsernameInput('');
+    };
+
+    // sending a message
+    const handleSubmitMessage = () => {
+        console.log('Message Submitted', {
+            user: currentUsername,
+            content: messageInput,
+        });
+        socket.emit('chat', {
+            user: currentUsername,
+            content: messageInput,
+            lobbyId: params.lobbyId,
+        });
+        setMessageInput('');
     };
 
     return (
         <Layout
             style={{
                 height: '100vh',
-                // display: 'flex',
-                // justifyContent: 'center',
-                // alignItems: 'center',
             }}
         >
             <Header
                 style={{
                     textAlign: 'center',
-                    // backgroundColor: 'transparent',
                     backgroundColor: 'rgba(50, 50, 50, 0.2)',
                 }}
             >
@@ -59,24 +99,27 @@ const Lobby = () => {
 
                     <Divider />
 
-                    <Message />
-                    <Message />
-                    <Message />
-                    <Message />
-                    <Message />
+                    <Message username={'Proutman'} content={'Prout Prout'} />
+                    <Message username={'Testman'} content={'Test Test'} />
+                    <Message username={'Helloman'} content={'Hello Hello'} />
+                    <Message username={'azeaezman'} content={'Azeaea Azeaea'} />
+
+                    {listOfMessages}
 
                     <Divider />
 
-                    <Form style={{}}>
+                    <Form onFinish={handleSubmitMessage} style={{}}>
                         <Input
                             type="textarea"
                             placeholder="New Message ..."
+                            value={messageInput}
+                            onChange={(e) => setMessageInput(e.target.value)}
                             bordered={false}
                             style={{
                                 backgroundColor: 'rgba(50, 50, 50, 0.2)',
                             }}
                         />
-                        <Button type="text" block>
+                        <Button type="text" htmlType="submit" block>
                             Send
                         </Button>
                     </Form>
@@ -108,7 +151,10 @@ const Lobby = () => {
                             },
                         ]}
                     >
-                        <Input />
+                        <Input
+                            value={usernameInput}
+                            onChange={(e) => setUsernameInput(e.target.value)}
+                        />
                     </Form.Item>
                 </Form>
             </Modal>

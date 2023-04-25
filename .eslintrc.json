@@ -23,6 +23,7 @@
     "prettier/prettier": "error",
     "no-empty-pattern": "off",
     "@typescript-eslint/no-empty-interface": "off",
-    "react/react-in-jsx-scope": "off"
+    "react/react-in-jsx-scope": "off",
+    "react/prop-types": "off"
   }
 }

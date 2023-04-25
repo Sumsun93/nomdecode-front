@@ -1,13 +1,19 @@
 import {Typography} from 'antd';
 
-function Message() {
+interface MessageProps {
+    username: string;
+    content: string;
+}
+
+function Message({username, content}: MessageProps) {
     return (
         <Typography.Paragraph
             style={{
-                padding: '1rem',
+                padding: '0.5rem 1rem',
+                margin: '0',
             }}
         >
-            User : Content
+            <span>{username} :</span> <span>{content}</span>
         </Typography.Paragraph>
     );
 }
