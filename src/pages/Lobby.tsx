@@ -14,7 +14,7 @@ import {RootState} from '../store';
 interface MessageObj {
     user: string;
     content: string;
-    lobbyId: number;
+    lobbyId: string; // ?
 }
 
 const Lobby = () => {
@@ -64,6 +64,10 @@ const Lobby = () => {
         }
     };
 
+    const handleStartGame = () => {
+        console.log('Clicked on start game');
+    };
+
     const listOfMessages = messages.map((message) => (
         <Message
             key={self.crypto.randomUUID()}
@@ -90,8 +94,33 @@ const Lobby = () => {
             <Divider style={{margin: '0'}} />
 
             <Layout>
+                <Sider
+                    width="25%"
+                    style={{
+                        backgroundColor: 'rgba(50, 50, 50, 0.2)',
+                    }}
+                >
+                    <Typography.Title style={{textAlign: 'center'}}>
+                        List of players
+                    </Typography.Title>
+
+                    <Typography.Title style={{textAlign: 'center'}}>
+                        Options ?
+                    </Typography.Title>
+                </Sider>
+
                 <Content>
-                    <Typography.Paragraph> Main content </Typography.Paragraph>
+                    <Typography.Title style={{textAlign: 'center'}}>
+                        Main content
+                    </Typography.Title>
+
+                    <Button
+                        onClick={handleStartGame}
+                        type="primary"
+                        size="large"
+                    >
+                        Start game
+                    </Button>
                 </Content>
 
                 <Sider
@@ -106,16 +135,11 @@ const Lobby = () => {
 
                     <Divider />
 
-                    <Message username={'Proutman'} content={'Prout Prout'} />
-                    <Message username={'Testman'} content={'Test Test'} />
-                    <Message username={'Helloman'} content={'Hello Hello'} />
-                    <Message username={'azeaezman'} content={'Azeaea Azeaea'} />
-
                     {listOfMessages}
 
                     <Divider />
 
-                    <Form onFinish={handleSubmitMessage} style={{}}>
+                    <Form onFinish={handleSubmitMessage}>
                         <Input
                             type="textarea"
                             placeholder="New Message ..."

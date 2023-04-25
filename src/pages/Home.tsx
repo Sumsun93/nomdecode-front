@@ -8,7 +8,6 @@ function Home() {
     const navigate = useNavigate();
 
     const handleClick = () => {
-        console.log('click');
         socket.on('lobbyCreated', (lobbyId) => {
             navigate(`/lobby/${lobbyId}`);
         });
