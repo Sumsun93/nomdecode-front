@@ -31,17 +31,14 @@ const Lobby = () => {
     const [usernameInput, setUsernameInput] = useState('');
 
     // receiving a message (including own)
-    socket.on('chat', function (message) {
-        setMessages([...messages, message]);
-    });
-
-    const listOfMessages = messages.map((message) => (
-        <Message
-            key={self.crypto.randomUUID()}
-            username={message.user}
-            content={message.content}
-        />
-    ));
+    useEffect(() => {
+        if (socket) {
+            socket.on('chat', (message) => {
+                // console.log('Received a message'); // ! Log plusieurs fois ?
+                setMessages([...messages, message]);
+            });
+        }
+    }, [socket, messages]);
 
     // joining the lobby
     const handleSubmit = () => {
@@ -53,17 +50,27 @@ const Lobby = () => {
 
     // sending a message
     const handleSubmitMessage = () => {
-        console.log('Message Submitted', {
-            user: currentUsername,
-            content: messageInput,
-        });
-        socket.emit('chat', {
-            user: currentUsername,
-            content: messageInput,
-            lobbyId: params.lobbyId,
-        });
-        setMessageInput('');
+        // console.log('Message Submitted', {
+        //     user: currentUsername,
+        //     content: messageInput,
+        // });
+        if (messageInput !== '') {
+            socket.emit('chat', {
+                user: currentUsername,
+                content: messageInput,
+                lobbyId: params.lobbyId,
+            });
+            setMessageInput('');
+        }
     };
+
+    const listOfMessages = messages.map((message) => (
+        <Message
+            key={self.crypto.randomUUID()}
+            username={message.user}
+            content={message.content}
+        />
+    ));
 
     return (
         <Layout
